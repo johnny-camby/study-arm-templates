@@ -39,18 +39,25 @@ jobs:
           subcriptionId: 2ceceffc-b0a5-48ea-849e-5c4bf2e82a81
           region: Australia East
           template: ./arm-templates/resourcegroup.json
+          parameters:
+            location="Australia East"
+            resourceGroupName=rg-githubactions
           deploymentName: rg-githubactions
             
       - name: Deploy Storage Account
         uses: Azure/arm-deploy@v1.0.9
+        id: storageAccountDeploy
         with:
          scope: resourceGroup
          resourceGroupName: rg-githubactions
          subcriptionId: 2ceceffc-b0a5-48ea-849e-5c4bf2e82a81
          template: ./arm-templates/storageaccount.json
          parameters: 
-           ./arm-templates/storageaccount.parameters.json
+           #./arm-templates/storageaccount.parameters.json
+           sku=Standard_LRS
            storageAccountName=dewetect002
            location="Australia East"
          deploymentMode: incremental
+
+      - run: echo ${{ steps.storageAccountDeploy.outputs.BlobUri }}   
           
